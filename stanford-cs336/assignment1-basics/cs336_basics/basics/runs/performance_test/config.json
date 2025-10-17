@@ -1,6 +1,6 @@
 {
   "experiment_name": "performance_test",
-  "experiment_id": "523bfca7",
+  "experiment_id": "316c5e96",
   "description": "Performance test with TF32 and compilation",
   "tags": [],
   "vocab_size": 10000,
@@ -27,5 +27,6 @@
   "seed": 42,
   "log_interval": 10,
   "eval_interval": 50,
-  "checkpoint_interval": 1000
+  "checkpoint_interval": 1000,
+  "metadata": {}
 }

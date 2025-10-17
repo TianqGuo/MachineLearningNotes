@@ -2,7 +2,7 @@
   "experiment_name": "performance_test",
   "config": {
     "experiment_name": "performance_test",
-    "experiment_id": "523bfca7",
+    "experiment_id": "316c5e96",
     "description": "Performance test with TF32 and compilation",
     "tags": [],
     "vocab_size": 10000,
@@ -29,25 +29,26 @@
     "seed": 42,
     "log_interval": 10,
     "eval_interval": 50,
-    "checkpoint_interval": 1000
+    "checkpoint_interval": 1000,
+    "metadata": {}
   },
   "statistics": {
     "total_steps": 13,
-    "total_wallclock_time": 295.09025144577026,
-    "total_wallclock_hours": 0.08196951429049174,
+    "total_wallclock_time": 266.41759037971497,
+    "total_wallclock_hours": 0.07400488621658749,
     "train_loss": {
-      "min": 4.069373607635498,
+      "min": 4.069375038146973,
       "max": 9.256617546081543,
-      "mean": 5.516599941253662,
-      "final": 4.069373607635498,
+      "mean": 5.516600275039673,
+      "final": 4.069375038146973,
       "initial": 9.256617546081543
     },
     "val_loss": {
-      "min": 4.04915189743042,
+      "min": 4.0491530179977415,
       "max": 9.25914568901062,
-      "mean": 5.937552086512248,
-      "final": 4.04915189743042,
-      "best": 4.04915189743042
+      "mean": 5.937552913029989,
+      "final": 4.0491530179977415,
+      "best": 4.0491530179977415
     }
   },
   "metrics_count": 13
