@@ -1,0 +1,28 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# IDE
+.idea/
+
+# Anaconda project metadata
+anaconda_projects/
+
+# Model checkpoints / binary assets
+*.pt
+*.pth
+*.bin
+
+# Large raw datasets (too large for git, regenerable from source)
+stanford-cs336/assignment1-basics/data/*.txt
+stanford-cs336/assignment1-basics/cs336_basics/artifacts/datasets/owt_train_tokens.npy
+stanford-cs336/assignment1-basics/cs336_basics/artifacts/datasets/tinystories_tokens.npy
+stanford-cs336/assignment1-basics/cs336_basics/artifacts/datasets/tinystories_train_tokens.npy
+
+# Large binary profiling/result outputs (regenerable)
+stanford-cs336/assignment2-systems/results/memory_profiling/*.pickle
+stanford-cs336/assignment2-systems/results/memory_profiling/test_only/
+stanford-cs336/assignment2-systems/results/nsight_profiles/raw_test_data/

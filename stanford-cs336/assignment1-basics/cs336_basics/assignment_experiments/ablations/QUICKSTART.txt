@@ -1,0 +1,152 @@
+================================================================================
+ABLATION EXPERIMENTS - QUICK REFERENCE
+================================================================================
+
+SETUP COMPLETE ✓
+- All model implementations tested and working
+- Integration with run_experiment.py complete
+- TypeError issue FIXED
+
+================================================================================
+RUNNING EXPERIMENTS
+================================================================================
+
+From project root: /mnt/d/Repos/MachineLearningNotes/stanford-cs336/assignment1-basics
+
+1. BASELINE (Reference)
+-----------------------
+uv run python cs336_basics/assignment_experiments/ablations/run_ablation.py \
+    --ablation baseline
+
+2. NO LAYER NORM (Expected to be unstable at default LR)
+--------------------------------------------------------
+# Try default LR first (will likely diverge)
+uv run python cs336_basics/assignment_experiments/ablations/run_ablation.py \
+    --ablation no_layer_norm
+
+# Then try lower LRs
+for lr in 1e-4 5e-5 2e-5 1e-5; do
+    uv run python cs336_basics/assignment_experiments/ablations/run_ablation.py \
+        --ablation no_layer_norm \
+        --learning-rate $lr \
+        --output-dir cs336_basics/basics/runs/ablations/no_layer_norm_lr_$lr
+done
+
+3. POST-NORM
+------------
+uv run python cs336_basics/assignment_experiments/ablations/run_ablation.py \
+    --ablation post_norm
+
+4. NO POSITION EMBEDDINGS (NoPE)
+---------------------------------
+uv run python cs336_basics/assignment_experiments/ablations/run_ablation.py \
+    --ablation no_position_emb
+
+5. SILU FFN (No gating)
+-----------------------
+uv run python cs336_basics/assignment_experiments/ablations/run_ablation.py \
+    --ablation silu_ffn
+
+================================================================================
+FASTER TESTING (Low-Resource Mode)
+================================================================================
+
+Add --low-resource flag to use 40M tokens instead of 328M:
+
+uv run python cs336_basics/assignment_experiments/ablations/run_ablation.py \
+    --ablation baseline \
+    --low-resource
+
+================================================================================
+ANALYZING RESULTS
+================================================================================
+
+After running experiments:
+
+uv run python cs336_basics/assignment_experiments/ablations/analyze_ablations.py
+
+This generates:
+- cs336_basics/basics/runs/ablations/ablation_comparison.png
+- cs336_basics/basics/runs/ablations/ablation_analysis.txt
+
+================================================================================
+QUICK STATUS CHECK
+================================================================================
+
+# Check which experiments completed
+for abl in baseline no_layer_norm post_norm no_position_emb silu_ffn; do
+    if [ -f "cs336_basics/basics/runs/ablations/$abl/summary.json" ]; then
+        echo "✓ $abl completed"
+        jq -r '.statistics.val_loss.best' \
+            cs336_basics/basics/runs/ablations/$abl/summary.json
+    else
+        echo "✗ $abl not completed"
+    fi
+done
+
+================================================================================
+OUTPUT LOCATIONS
+================================================================================
+
+Each experiment saves to:
+cs336_basics/basics/runs/ablations/{ablation_name}/
+├── config.json          - Experiment configuration
+├── summary.json         - Final statistics
+├── metrics.csv          - Training metrics
+├── loss_curves.png      - Visualizations
+└── checkpoints/
+    ├── best_model.pt
+    └── final_checkpoint.pt
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+Issue: "TypeError: got multiple values for keyword argument"
+Fix: ✓ ALREADY FIXED in run_experiment.py
+
+Issue: Out of memory
+Fix: Use --batch-size 16 or --low-resource
+
+Issue: Training diverges (loss → NaN)
+Expected for: no_layer_norm at high LR
+Fix: Use --learning-rate 1e-5 or lower
+
+================================================================================
+ESTIMATED TIMES (H100)
+================================================================================
+
+With 328M tokens:
+- Each experiment: ~1-1.5 hours
+- Total (5 ablations): ~6-8 hours
+
+With --low-resource (40M tokens):
+- Each experiment: ~10-15 minutes
+- Total (5 ablations): ~1 hour
+
+================================================================================
+ASSIGNMENT DELIVERABLES
+================================================================================
+
+For each problem, you need:
+
+1. layer_norm_ablation:
+   - Learning curve at 3e-4 (showing instability)
+   - Learning curve at best stable LR
+   - Commentary on RMSNorm importance
+
+2. pre_norm_ablation:
+   - Comparative learning curves (post-norm vs pre-norm)
+   - Commentary
+
+3. no_pos_emb:
+   - Comparative learning curves (NoPE vs RoPE)
+   - Commentary
+
+4. swiglu_ablation:
+   - Comparative learning curves (SiLU vs SwiGLU)
+   - Commentary on findings
+
+All curves automatically saved by experiment infrastructure!
+
+================================================================================
