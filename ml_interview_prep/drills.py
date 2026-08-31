@@ -84,7 +84,9 @@ def softmax(logits, axis=-1):
 
     Must not overflow on inputs like 1e5.
     """
-    raise NotImplementedError
+    # raise NotImplementedError
+    e_score =  np.exp(logits - np.max(logits, axis=axis, keepdims=True))
+    return e_score / np.sum(e_score, axis=axis, keepdims=True)
 
 
 def cross_entropy_loss(logits, labels):
@@ -93,12 +95,21 @@ def cross_entropy_loss(logits, labels):
     logits: [N, C] float, labels: [N] int class indices.
     Returns: scalar float. Must be stable (log-sum-exp, not log(softmax(x))).
     """
-    raise NotImplementedError
+    # raise NotImplementedError
+    n = logits.shape[0]
+    shifted = logits - np.max(logits, axis=-1, keepdims=True)
+    log_sum_exp = np.log(np.sum(np.exp(shifted), axis=-1))  # [N], no keepdims
+    return -np.mean(shifted[np.arange(n), labels] - log_sum_exp)
 
 
 def cross_entropy_grad(logits, labels):
     """Gradient of `cross_entropy_loss` w.r.t. logits. Returns [N, C]."""
-    raise NotImplementedError
+    n = logits.shape[0]
+    probs = softmax(logits, axis=-1)                # [N, C]
+    onehot = np.zeros_like(probs)
+    onehot[np.arange(n), labels] = 1.0
+    return (probs - onehot) / n
+
 
 
 def pca(X, n_components):
